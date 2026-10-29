@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>See It On Your Lawn | Lawnfetti Yard Greeting Preview</title>
+<meta name="description" content="Upload a photo of your yard and preview a custom Lawnfetti yard greeting display on it. Pick the message, colors and decorations, then book it. Serving Easley, Pendleton and Clemson, SC.">
+<meta property="og:title" content="See a Lawnfetti display on your own lawn">
+<meta property="og:description" content="Upload a photo of your yard and design your celebration display in seconds.">
+<meta property="og:image" content="images/og-image.jpg">
+<meta name="theme-color" content="#ff3ea5">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#ff3ea5; --pink-deep:#e01f87; --pink-soft:#ffe3f1;
+  --teal:#16bfb0; --teal-deep:#0b8f84; --sun:#ffc93c;
+  --ink:#1d1630; --ink-soft:#4a4360; --cream:#fffaf3; --line:#e4dfee;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.5;font-size:16px;overflow-x:hidden}
+a{color:var(--pink-deep)}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:20;background:rgba(255,250,243,.94);backdrop-filter:blur(8px);border-bottom:2px solid rgba(29,22,48,.06)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-mark{width:40px;height:40px;border-radius:50%;background:var(--pink);display:grid;place-items:center;border:3px solid var(--ink);font-family:Pacifico;color:#fff;font-size:1.05rem}
+.brand-name{font-family:Pacifico;font-size:1.45rem;color:var(--pink-deep)}
+.nav-right{display:flex;gap:16px;align-items:center}
+.nav-right a.back{font-weight:800;text-decoration:none;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:Fredoka;font-weight:600;font-size:1.05rem;padding:12px 22px;border-radius:99px;text-decoration:none;border:3px solid var(--ink);cursor:pointer;transition:transform .15s,box-shadow .15s;background:#fff;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn-primary{background:var(--pink);color:#fff}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-sm{padding:8px 16px;font-size:.95rem}
+
+.intro{padding:28px 0 18px}
+.intro h1{font-size:clamp(1.9rem,4vw,2.8rem)}
+.intro h1 em{font-style:normal;color:var(--pink)}
+.intro p{margin:8px 0 0;color:var(--ink-soft);max-width:720px;font-size:1.05rem}
+
+.tool{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:24px;align-items:start;padding-bottom:60px}
+.stage-col{position:sticky;top:80px}
+.stage{position:relative;background:#cfe9d2;border:3px solid var(--ink);border-radius:22px;overflow:hidden;box-shadow:8px 8px 0 var(--ink)}
+#stage{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+#stage.dragging{cursor:grabbing}
+.stage-hint{position:absolute;left:12px;top:12px;background:rgba(29,22,48,.78);color:#fff;font-weight:700;font-size:.85rem;padding:6px 12px;border-radius:99px;pointer-events:none;transition:opacity .4s}
+.stage-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.note{font-size:.85rem;color:var(--ink-soft);margin-top:12px}
+
+.panel{background:#fff;border:3px solid var(--ink);border-radius:22px;padding:22px;box-shadow:8px 8px 0 var(--pink)}
+.step{padding:16px 0;border-bottom:2px dashed var(--line)}
+.step:first-child{padding-top:0}
+.step:last-child{border-bottom:0;padding-bottom:0}
+.step h3{font-size:1.1rem;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
+.upload-row{display:flex;gap:10px;flex-wrap:wrap}
+.upload-row label.btn{flex:1;min-width:170px}
+#photo{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--cream);border-radius:99px;padding:7px 14px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;color:var(--ink)}
+.chip:hover{border-color:var(--pink)}
+.chip[aria-pressed=true]{border-color:var(--pink);background:var(--pink-soft)}
+.chips.emoji .chip{font-size:1.35rem;padding:4px 10px;line-height:1.3}
+.field{margin-bottom:10px}
+.field:last-child{margin-bottom:0}
+label.lbl{display:block;font-weight:800;font-size:.88rem;margin-bottom:4px}
+label.lbl span{font-weight:600;color:var(--ink-soft)}
+input[type=text]{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink)}
+input[type=text]:focus{outline:none;border-color:var(--pink);background:#fff}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.swatch{border:2px solid var(--line);border-radius:14px;background:#fff;padding:6px 4px;cursor:pointer;font:inherit;font-size:.75rem;font-weight:800;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px}
+.swatch i{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);display:block}
+.swatch[aria-pressed=true]{border-color:var(--pink);background:var(--pink-soft)}
+.range{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.range label{font-weight:800;font-size:.88rem;width:84px;flex-shrink:0}
+.range input{flex:1;accent-color:var(--pink)}
+.hint{font-size:.82rem;color:var(--ink-soft);margin:6px 0 0}
+.decor-count{font-weight:600;color:var(--ink-soft);font-size:.85rem;margin-left:auto}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;font-weight:700;transition:transform .3s;z-index:50}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+footer{background:var(--ink);color:#cfc9e6;padding:28px 0;font-size:.9rem}
+footer a{color:#fff;font-weight:700;text-decoration:none}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .tool{grid-template-columns:1fr}
+  .stage-col{position:static}
+  .nav-right a.back{display:none}
+}
+@media (max-width:480px){
+  .panel{padding:18px 16px}
+  .stage-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stage-actions .btn{padding:12px 10px;font-size:1rem}
+  #bookBtn{grid-column:1/-1}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand" aria-label="Lawnfetti home"><span class="brand-mark" aria-hidden="true">L</span><span class="brand-name">Lawnfetti</span></a>
+    <div class="nav-right">
+      <a class="back" href="index.html">← Back to site</a>
+      <a class="btn btn-primary btn-sm" href="index.html#book">Book a date</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1>See it on <em>your</em> lawn</h1>
+    <p>Upload a photo of your front yard, design your display, and drag it into place. When you love it, send it to us with your booking and we'll bring it to life.</p>
+  </div>
+
+  <div class="tool">
+    <div class="stage-col">
+      <div class="stage">
+        <canvas id="stage" width="1600" height="1100" aria-label="Preview of your yard with a Lawnfetti display"></canvas>
+        <div class="stage-hint" id="stageHint">✋ Drag the display to move it</div>
+      </div>
+      <div class="stage-actions">
+        <button class="btn btn-primary" id="bookBtn" type="button">Book this design 🎉</button>
+        <button class="btn" id="downloadBtn" type="button">Download image</button>
+        <button class="btn btn-teal" id="shareBtn" type="button" hidden>Share</button>
+      </div>
+      <p class="note">This is a preview to help you picture it. Your real display is hand-built from our inventory and matched as closely as we can to your design.</p>
+    </div>
+
+    <div class="panel">
+      <div class="step">
+        <h3><span class="num">1</span>Your yard</h3>
+        <div class="upload-row">
+          <label class="btn btn-primary" for="photo">📸 Upload yard photo</label>
+          <button class="btn" type="button" id="sampleBtn">Use a sample yard</button>
+        </div>
+        <input type="file" id="photo" accept="image/*">
+        <p class="hint">Tip: stand at the street and take the photo straight on, with the grass in the bottom half.</p>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">2</span>What are we celebrating?</h3>
+        <div class="chips" id="occasions"></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">3</span>Your message</h3>
+        <div class="field"><label class="lbl" for="lineTop">Top line <span>(script)</span></label><input type="text" id="lineTop" maxlength="18"></div>
+        <div class="field"><label class="lbl" for="lineMain">Big letters</label><input type="text" id="lineMain" maxlength="14"></div>
+        <div class="field"><label class="lbl" for="lineName">Name or number <span>(optional)</span></label><input type="text" id="lineName" maxlength="12"></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">4</span>Letter style</h3>
+        <div class="swatches" id="styles"></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">5</span>Decorations <span class="decor-count" id="decorCount"></span></h3>
+        <div class="chips emoji" id="decor"></div>
+        <p class="hint">Pick up to 6. We'll match them with cutouts from our collection.</p>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">6</span>Fine-tune</h3>
+        <div class="range"><label for="size">Size</label><input type="range" id="size" min="25" max="98" value="72"></div>
+        <div class="range"><label for="light">Lighting</label><input type="range" id="light" min="45" max="115" value="100"></div>
+        <p class="hint">Lower the lighting to match an evening or shady photo.</p>
+        <button class="btn btn-sm" type="button" id="resetBtn" style="margin-top:10px">Re-center display</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Lawnfetti · Easley, Pendleton &amp; Clemson, SC</span>
+    <span><a href="mailto:hello@lawnfetti.com">hello@lawnfetti.com</a> · <a href="https://www.facebook.com/lawnfetti" target="_blank" rel="noopener">Facebook</a></span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  // ---------- data ----------
+  const OCCASIONS = [
+    {id:'birthday', label:'🎂 Birthday', event:'Birthday', top:'Happy', main:'BIRTHDAY', name:'EMMA', style:'pink', decor:['🎈','🎂','⭐','🎁']},
+    {id:'grad', label:'🎓 Graduation', event:'Graduation', top:'Congrats', main:'GRAD', name:'2027', style:'blackgold', decor:['🎓','⭐','📜','🎈']},
+    {id:'baby', label:'🍼 New baby', event:'Baby / Welcome Home', top:'Welcome', main:'BABY', name:'', style:'teal', decor:['🍼','🧸','⭐','🎈']},
+    {id:'anniv', label:'💞 Anniversary', event:'Anniversary', top:'Happy', main:'ANNIVERSARY', name:'#25', style:'gold', decor:['🥂','💞','⭐','💐']},
+    {id:'home', label:'🏡 New home', event:'New Home / Open House', top:'Welcome', main:'HOME', name:'', style:'silver', decor:['🏡','🔑','⭐','🎈']},
+    {id:'school', label:'🏫 School', event:'School / Community Event', top:'Welcome', main:'BACK', name:'', style:'rainbow', decor:['🍎','🚌','✏️','⭐']},
+    {id:'holiday', label:'🍂 Holiday', event:'Holiday / Festival', top:'Happy', main:'FALL', name:"Y'ALL", style:'orange', decor:['🎃','🍂','🌻','⭐']},
+  ];
+  const STYLES = {
+    pink:     {label:'Pink',      kind:'glitter', c:['#ff7cc4','#e0177f']},
+    teal:     {label:'Teal',      kind:'glitter', c:['#4fe0d2','#0b8f84']},
+    gold:     {label:'Gold',      kind:'sequin',  c:['#ffe08a','#b07d0a']},
+    silver:   {label:'Silver',    kind:'glitter', c:['#f2f6f9','#7f8e9b']},
+    purple:   {label:'Purple',    kind:'glitter', c:['#c7a2ff','#6230d1']},
+    blue:     {label:'Blue',      kind:'glitter', c:['#7cc4ff','#1c5cc2']},
+    orange:   {label:'Orange',    kind:'glitter', c:['#ffb066','#d9580b']},
+    blackgold:{label:'Black',     kind:'glitter', c:['#4a4258','#0e0b16'], sparkle:'#ffd76a'},
+    rainbow:  {label:'Rainbow',   kind:'mix', mix:['pink','teal','gold','purple','blue','orange']},
+    usa:      {label:'USA',       kind:'mix', mix:['red','silver','blue']},
+    red:      {label:'Red',       kind:'glitter', c:['#ff6b6b','#c4141f'], hidden:true},
+  };
+  const DECOR = ['🎈','🎂','⭐','🎁','🎉','👑','🎓','📜','🍼','🧸','💞','🥂','💐','🏡','🔑','🍎','🚌','✏️','🎃','🍂','🌻','🎄','⚽','🏈','🏀','⚾','🦄','🦖','🌈','🦋','🐶','🎮'];
+  const MAX_DECOR = 6;
+
+  // ---------- state ----------
+  const S = {
+    occasion:'birthday', top:'', main:'', name:'', style:'pink', decor:[],
+    size:.72, light:1, cx:.5, base:.86, photo:null, sample:true
+  };
+
+  const $ = id => document.getElementById(id);
+  const stage = $('stage'), ctx = stage.getContext('2d');
+  let display = null;           // offscreen canvas holding the sign group
+  let dispBox = null;           // where it was last drawn on stage
+
+  // ---------- seeded random so letters don't jitter on every redraw ----------
+  function rng(seed){ let s = seed>>>0 || 1; return () => (s = (s*1664525 + 1013904223)>>>0) / 4294967296; }
+  function hash(str){ let h=2166136261; for(const ch of str){ h^=ch.codePointAt(0); h=Math.imul(h,16777619);} return h>>>0; }
+
+  // ---------- glitter / sequin fill patterns ----------
+  const patternCache = {};
+  function shade(hex, amt){
+    const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255;
+    const f=v=>Math.max(0,Math.min(255,Math.round(amt<0?v*(1+amt):v+(255-v)*amt)));
+    return `rgb(${f(r)},${f(g)},${f(b)})`;
+  }
+  function makePattern(key){
+    if(patternCache[key]) return patternCache[key];
+    const st = STYLES[key];
+    const p = document.createElement('canvas'); p.width = p.height = 120;
+    const g = p.getContext('2d'); const r = rng(hash(key));
+    const grad = g.createLinearGradient(0,0,120,120);
+    grad.addColorStop(0, st.c[0]); grad.addColorStop(1, st.c[1]);
+    g.fillStyle = grad; g.fillRect(0,0,120,120);
+    if(st.kind === 'sequin'){
+      const step = 13;
+      for(let y=0;y<130;y+=step*0.86){
+        for(let x=((y/(step*0.86))%2)*step/2; x<130; x+=step){
+          const rg = g.createRadialGradient(x-2,y-2,1,x,y,step*0.55);
+          const lift = r()*0.6-0.15;
+          rg.addColorStop(0, '#fffbe6'); rg.addColorStop(.35, shade(st.c[0], lift)); rg.addColorStop(1, st.c[1]);
+          g.fillStyle = rg; g.beginPath(); g.arc(x,y,step*0.52,0,Math.PI*2); g.fill();
+        }
+      }
+    } else {
+      for(let i=0;i<1400;i++){
+        const x=r()*120, y=r()*120, rad=0.5+r()*1.6, t=r();
+        g.fillStyle = t<.38 ? shade(st.c[0], .55) : t<.72 ? shade(st.c[1], -.25) : t<.93 ? 'rgba(255,255,255,.85)' : (st.sparkle||'#ffffff');
+        g.beginPath(); g.arc(x,y,rad,0,Math.PI*2); g.fill();
+      }
+      g.fillStyle='rgba(255,255,255,.95)';
+      for(let i=0;i<14;i++){ const x=r()*120,y=r()*120,s=2+r()*3; g.fillRect(x-s,y-.6,s*2,1.2); g.fillRect(x-.6,y-s,1.2,s*2); }
+    }
+    return (patternCache[key] = p);
+  }
+  function fillFor(c, styleKey){ return c.createPattern(makePattern(styleKey), 'repeat'); }
+  function styleForLetter(i){
+    const st = STYLES[S.style];
+    return st.kind === 'mix' ? st.mix[i % st.mix.length] : S.style;
+  }
+
+  // ---------- emoji cutouts with a white border ----------
+  const cutoutCache = {};
+  function cutout(emoji, size){
+    const key = emoji+'|'+size;
+    if(cutoutCache[key]) return cutoutCache[key];
+    const pad = Math.round(size*0.16), W = size + pad*2;
+    const e = document.createElement('canvas'); e.width = e.height = W;
+    const ec = e.getContext('2d');
+    ec.font = `${size*0.82}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ec.textAlign='center'; ec.textBaseline='middle';
+    ec.fillText(emoji, W/2, W/2 + size*0.04);
+    // white silhouette
+    const s = document.createElement('canvas'); s.width = s.height = W;
+    const sc = s.getContext('2d'); sc.drawImage(e,0,0);
+    sc.globalCompositeOperation='source-in'; sc.fillStyle='#fff'; sc.fillRect(0,0,W,W);
+    const out = document.createElement('canvas'); out.width = out.height = W;
+    const oc = out.getContext('2d');
+    oc.shadowColor='rgba(0,0,0,.35)'; oc.shadowBlur=size*0.06; oc.shadowOffsetX=size*0.03; oc.shadowOffsetY=size*0.05;
+    const rad = size*0.07;
+    for(let a=0;a<16;a++){ const t=a/16*Math.PI*2; oc.drawImage(s, Math.cos(t)*rad, Math.sin(t)*rad); }
+    oc.shadowColor='transparent';
+    oc.drawImage(e,0,0);
+    return (cutoutCache[key] = out);
+  }
+
+  // ---------- build the sign display (transparent canvas) ----------
+  function buildDisplay(){
+    const H = 230;                          // main letter font size
+    const rows = [];
+    const top = S.top.trim(), main = S.main.trim().toUpperCase(), name = S.name.trim().toUpperCase();
+    if(top)  rows.push({text:top,  font:`400 ${H*0.6}px Pacifico`, size:H*0.6, script:true});
+    if(main) rows.push({text:main, font:`700 ${H}px Fredoka`, size:H});
+    if(name) rows.push({text:name, font:`700 ${H*0.86}px Fredoka`, size:H*0.86});
+    if(!rows.length) rows.push({text:'YAY!', font:`700 ${H}px Fredoka`, size:H});
+
+    const m = document.createElement('canvas').getContext('2d');
+    rows.forEach(r => {
+      m.font = r.font;
+      if(r.script){
+        const mt = m.measureText(r.text);
+        r.w = mt.width; r.asc = mt.actualBoundingBoxAscent; r.desc = mt.actualBoundingBoxDescent;
+      } else {
+        r.letters = [...r.text].map(ch => ({ch, w: ch===' ' ? r.size*0.32 : m.measureText(ch).width}));
+        const overlap = r.size*0.035;
+        r.w = r.letters.reduce((a,l)=>a+l.w,0) - overlap*(r.letters.length-1);
+        const mt = m.measureText(r.text.replace(/ /g,'') || 'A');
+        r.asc = mt.actualBoundingBoxAscent; r.desc = Math.max(mt.actualBoundingBoxDescent, 0);
+      }
+      r.h = r.asc + r.desc;
+    });
+
+    const border = H*0.13;
+    const gapY = -H*0.04;
+    const stakeLen = H*0.26;
+    const D = H*1.0;                                    // decor cutout size
+    const n = S.decor.length;
+    const leftN = n>1 ? Math.ceil(n/2) : 0, rightN = n - leftN;
+    const decorPadL = leftN ? D*0.95 : 0, decorPadR = rightN ? D*0.95 : 0;
+    const contentW = Math.max(...rows.map(r=>r.w));
+    const textH = rows.reduce((a,r)=>a+r.h,0) + gapY*(rows.length-1);
+    const pad = border*1.6;
+    const W = Math.ceil(contentW + decorPadL + decorPadR + pad*2);
+    const Ht = Math.ceil(textH + pad*2 + stakeLen + H*0.12);
+
+    const c = document.createElement('canvas'); c.width = W; c.height = Ht;
+    const g = c.getContext('2d');
+    g.lineJoin = 'round'; g.lineCap = 'round';
+    const groundY = Ht - H*0.08;
+    const textBottom = groundY - stakeLen;
+    const textTop = textBottom - textH;
+    const cx0 = pad + decorPadL + contentW/2;
+
+    // ground shadow
+    const sh = g.createRadialGradient(W/2, groundY, 1, W/2, groundY, W*0.5);
+    sh.addColorStop(0,'rgba(0,0,0,.28)'); sh.addColorStop(1,'rgba(0,0,0,0)');
+    g.save(); g.translate(0, groundY); g.scale(1, 0.09); g.fillStyle = sh;
+    g.beginPath(); g.arc(W/2, 0, W*0.5, 0, Math.PI*2); g.fill(); g.restore();
+
+    // stakes under the bottom row and the decor
+    g.strokeStyle = '#5d5a63'; g.lineWidth = H*0.022;
+    const last = rows[rows.length-1];
+    let sx = cx0 - last.w/2;
+    if(last.letters){
+      last.letters.forEach(l => { if(l.ch!==' '){ g.beginPath(); g.moveTo(sx+l.w/2, textBottom-H*0.1); g.lineTo(sx+l.w/2, groundY); g.stroke(); } sx += l.w - last.size*0.035; });
+    } else {
+      [0.2,0.5,0.8].forEach(f=>{ g.beginPath(); g.moveTo(cx0-last.w/2+last.w*f, textBottom-H*0.1); g.lineTo(cx0-last.w/2+last.w*f, groundY); g.stroke(); });
+    }
+
+    // decor placement (behind letters)
+    const decorSpots = [];
+    const spreadY = (count, i) => count===1 ? textBottom - D*0.55 : textTop + D*0.25 + (textH - D*0.5) * (i/(count-1));
+    for(let i=0;i<leftN;i++)  decorSpots.push({e:S.decor[i],        x: pad + decorPadL*0.5,               y: spreadY(leftN,i),  rot:-0.12 + i*0.08});
+    for(let i=0;i<rightN;i++) decorSpots.push({e:S.decor[leftN+i],  x: W - pad - decorPadR*0.5,           y: spreadY(rightN,i), rot: 0.12 - i*0.08});
+    decorSpots.forEach(d => {
+      g.beginPath(); g.moveTo(d.x, d.y); g.lineTo(d.x, groundY); g.stroke();
+    });
+    decorSpots.forEach(d => {
+      const img = cutout(d.e, Math.round(D));
+      g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.drawImage(img, -img.width/2, -img.height/2); g.restore();
+    });
+
+    // letters
+    let y = textTop;
+    let letterIndex = 0;
+    rows.forEach((r, ri) => {
+      const baseline = y + r.asc;
+      g.font = r.font; g.textBaseline = 'alphabetic';
+      const rr = rng(hash(r.text + ri));
+      const drawGlyph = (txt, x, styleKey, rot) => {
+        g.save(); g.translate(x, baseline); g.rotate(rot);
+        g.textAlign = 'left';
+        g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = r.size*0.05; g.shadowOffsetX = r.size*0.025; g.shadowOffsetY = r.size*0.04;
+        g.strokeStyle = '#ffffff'; g.lineWidth = r.size*0.17; g.strokeText(txt, 0, 0);
+        g.shadowColor = 'transparent';
+        g.strokeStyle = '#1d1630'; g.lineWidth = r.size*0.07; g.strokeText(txt, 0, 0);
+        g.fillStyle = fillFor(g, styleKey); g.fillText(txt, 0, 0);
+        // soft top highlight
+        const hl = g.createLinearGradient(0, -r.asc, 0, 0);
+        hl.addColorStop(0,'rgba(255,255,255,.28)'); hl.addColorStop(.5,'rgba(255,255,255,0)');
+        g.fillStyle = hl; g.fillText(txt, 0, 0);
+        g.restore();
+      };
+      if(r.script){
+        drawGlyph(r.text, cx0 - r.w/2, styleForLetter(letterIndex++), 0);
+      } else {
+        let x = cx0 - r.w/2;
+        r.letters.forEach(l => {
+          if(l.ch !== ' '){
+            const rot = (rr()-0.5)*0.07;
+            const dy = (rr()-0.5)*r.size*0.03;
+            g.save(); g.translate(0, dy); drawGlyph(l.ch, x, styleForLetter(letterIndex++), rot); g.restore();
+          }
+          x += l.w - r.size*0.035;
+        });
+      }
+      y += r.h + gapY;
+    });
+
+    display = c;
+  }
+
+  // ---------- sample yard ----------
+  function sampleYard(){
+    const c = document.createElement('canvas'); c.width = 1600; c.height = 1100;
+    const g = c.getContext('2d');
+    const sky = g.createLinearGradient(0,0,0,560);
+    sky.addColorStop(0,'#9fd3f5'); sky.addColorStop(1,'#e8f5fb');
+    g.fillStyle = sky; g.fillRect(0,0,1600,600);
+    // house
+    g.fillStyle='#c9b9a4'; g.fillRect(430,250,740,330);
+    g.fillStyle='#6b4f3f'; g.beginPath(); g.moveTo(380,265); g.lineTo(800,90); g.lineTo(1220,265); g.closePath(); g.fill();
+    g.fillStyle='#f4efe7';
+    [[500,330],[640,330],[960,330],[1100,330]].forEach(([x,y])=>{ g.fillRect(x-8,y-8,96,116); });
+    g.fillStyle='#7aa6c2';
+    [[500,330],[640,330],[960,330],[1100,330]].forEach(([x,y])=>{ g.fillRect(x,y,80,100); });
+    g.fillStyle='#3a5f7d'; g.fillRect(760,380,90,200);
+    // trees
+    const tree=(x,y,r,col)=>{ g.fillStyle=col; [[0,0,1],[-.6,.3,.8],[.6,.3,.8],[0,-.35,.75]].forEach(([dx,dy,s])=>{ g.beginPath(); g.arc(x+dx*r,y+dy*r,r*s,0,Math.PI*2); g.fill(); }); };
+    g.fillStyle='#5a4031'; g.fillRect(170,330,34,260); g.fillRect(1420,350,34,240);
+    tree(187,300,140,'#3d7d3a'); tree(1437,320,130,'#457f3b');
+    // shrubs
+    for(let x=440;x<1180;x+=70){ g.fillStyle = x%140? '#4f8f45':'#3f7c3a'; g.beginPath(); g.arc(x,585,48,Math.PI,0); g.fill(); }
+    // lawn with mow stripes
+    const lawn = g.createLinearGradient(0,590,0,1100);
+    lawn.addColorStop(0,'#5c9e43'); lawn.addColorStop(1,'#3f8a36');
+    g.fillStyle = lawn; g.fillRect(0,585,1600,515);
+    g.globalAlpha=.08; g.fillStyle='#fff';
+    for(let i=0;i<9;i++){ g.beginPath(); g.moveTo(-200+i*260,1100); g.lineTo(-40+i*260,1100); g.lineTo(820+i*20,590); g.lineTo(780+i*20,590); g.fill(); }
+    g.globalAlpha=1;
+    // walkway
+    g.fillStyle='#d8d2c6'; g.beginPath(); g.moveTo(770,585); g.lineTo(840,585); g.lineTo(980,1100); g.lineTo(700,1100); g.closePath(); g.fill();
+    // grass texture
+    const r = rng(7);
+    for(let i=0;i<5000;i++){ const x=r()*1600, y=590+r()*510; g.strokeStyle = r()<.5?'rgba(30,80,25,.25)':'rgba(170,220,120,.18)'; g.lineWidth=1.2; g.beginPath(); g.moveTo(x,y); g.lineTo(x+(r()-.5)*4,y-4-r()*6); g.stroke(); }
+    return c;
+  }
+
+  // ---------- draw ----------
+  function render(forExport){
+    const bg = S.photo;
+    if(stage.width !== bg.width || stage.height !== bg.height){ stage.width = bg.width; stage.height = bg.height; }
+    ctx.clearRect(0,0,stage.width,stage.height);
+    ctx.drawImage(bg,0,0);
+    if(!display) return;
+    const w = stage.width * S.size;
+    const h = w * display.height / display.width;
+    const x = stage.width*S.cx - w/2;
+    const y = stage.height*S.base - h;
+    ctx.save();
+    if(S.light !== 1) ctx.filter = `brightness(${S.light})`;
+    ctx.drawImage(display, x, y, w, h);
+    ctx.restore();
+    dispBox = {x,y,w,h};
+    if(forExport){
+      const fs = Math.max(18, stage.width*0.018);
+      ctx.font = `600 ${fs}px Fredoka, sans-serif`;
+      const label = 'Lawnfetti preview · lawnfetti.com';
+      const tw = ctx.measureText(label).width;
+      ctx.fillStyle = 'rgba(255,62,165,.92)';
+      roundRect(ctx, stage.width - tw - fs*2.2, stage.height - fs*2.4, tw + fs*1.4, fs*1.7, fs*.85); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.textBaseline='middle';
+      ctx.fillText(label, stage.width - tw - fs*1.5, stage.height - fs*1.55);
+    }
+  }
+  function roundRect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+
+  let raf = 0;
+  function refresh(rebuild){
+    if(rebuild) buildDisplay();
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(()=>render(false));
+  }
+
+  // ---------- photo upload ----------
+  async function loadPhoto(file){
+    let bmp;
+    try { bmp = await createImageBitmap(file, {imageOrientation:'from-image'}); }
+    catch(e){
+      bmp = await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src=URL.createObjectURL(file); });
+    }
+    const max = 1600, sc = Math.min(1, max/Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width*sc); c.height = Math.round(bmp.height*sc);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    S.photo = c; S.sample = false;
+    const portrait = c.height > c.width;
+    S.size = portrait ? .86 : .62; S.cx = .5; S.base = portrait ? .82 : .86;
+    $('size').value = Math.round(S.size*100);
+    refresh(false);
+    toast('Looking good! Drag the display into place.');
+  }
+  $('photo').addEventListener('change', e => { const f = e.target.files[0]; if(f) loadPhoto(f).catch(()=>toast("Couldn't open that photo. Try a JPG or PNG.")); });
+  $('sampleBtn').addEventListener('click', () => { S.photo = sampleYard(); S.sample = true; S.size=.72; S.cx=.5; S.base=.86; $('size').value=72; refresh(false); });
+
+  // ---------- drag ----------
+  let drag = null;
+  function toCanvas(e){ const r = stage.getBoundingClientRect(); return {x:(e.clientX-r.left)*stage.width/r.width, y:(e.clientY-r.top)*stage.height/r.height}; }
+  stage.addEventListener('pointerdown', e => {
+    const p = toCanvas(e);
+    if(!dispBox) return;
+    const inside = p.x>=dispBox.x && p.x<=dispBox.x+dispBox.w && p.y>=dispBox.y && p.y<=dispBox.y+dispBox.h;
+    drag = {p, cx:S.cx, base:S.base, moveOnly: inside};
+    if(!inside){ S.cx = p.x/stage.width; S.base = Math.min(.99, (p.y + dispBox.h/2)/stage.height); refresh(false); drag = {p, cx:S.cx, base:S.base}; }
+    stage.setPointerCapture(e.pointerId); stage.classList.add('dragging');
+    $('stageHint').style.opacity = 0;
+  });
+  stage.addEventListener('pointermove', e => {
+    if(!drag) return;
+    const p = toCanvas(e);
+    S.cx = Math.min(1.1, Math.max(-.1, drag.cx + (p.x-drag.p.x)/stage.width));
+    S.base = Math.min(1.05, Math.max(.15, drag.base + (p.y-drag.p.y)/stage.height));
+    refresh(false);
+  });
+  const endDrag = () => { drag = null; stage.classList.remove('dragging'); };
+  stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('wheel', e => {
+    if(!e.ctrlKey && !e.metaKey && !e.altKey) return;
+    e.preventDefault();
+    S.size = Math.min(.98, Math.max(.25, S.size * (e.deltaY<0 ? 1.05 : 0.95)));
+    $('size').value = Math.round(S.size*100); refresh(false);
+  }, {passive:false});
+
+  // ---------- controls ----------
+  function setOccasion(id){
+    const o = OCCASIONS.find(x=>x.id===id); if(!o) return;
+    S.occasion = id; S.top=o.top; S.main=o.main; S.name=o.name; S.style=o.style; S.decor=[...o.decor];
+    $('lineTop').value=S.top; $('lineMain').value=S.main; $('lineName').value=S.name;
+    syncButtons(); refresh(true);
+  }
+  function syncButtons(){
+    document.querySelectorAll('#occasions .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===S.occasion));
+    document.querySelectorAll('#styles .swatch').forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===S.style));
+    document.querySelectorAll('#decor .chip').forEach(b=>b.setAttribute('aria-pressed', S.decor.includes(b.dataset.e)));
+    $('decorCount').textContent = `${S.decor.length}/${MAX_DECOR}`;
+  }
+  OCCASIONS.forEach(o => {
+    const b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.id=o.id; b.textContent=o.label;
+    b.addEventListener('click', ()=>setOccasion(o.id)); $('occasions').appendChild(b);
+  });
+  Object.entries(STYLES).forEach(([id,st]) => {
+    if(st.hidden) return;
+    const b = document.createElement('button'); b.type='button'; b.className='swatch'; b.dataset.id=id;
+    const i = document.createElement('i');
+    if(st.kind==='mix'){
+      const cols = st.mix.map(k=>STYLES[k].c[0]);
+      i.style.background = `conic-gradient(${cols.map((c,n)=>`${c} ${n/cols.length*100}% ${(n+1)/cols.length*100}%`).join(',')})`;
+    } else {
+      i.style.backgroundImage = `url(${makePattern(id).toDataURL()})`; i.style.backgroundSize='60px';
+    }
+    b.append(i, document.createTextNode(st.label));
+    b.addEventListener('click', ()=>{ S.style=id; syncButtons(); refresh(true); });
+    $('styles').appendChild(b);
+  });
+  DECOR.forEach(e => {
+    const b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.e=e; b.textContent=e; b.setAttribute('aria-label','Decoration '+e);
+    b.addEventListener('click', ()=>{
+      if(S.decor.includes(e)) S.decor = S.decor.filter(x=>x!==e);
+      else if(S.decor.length < MAX_DECOR) S.decor.push(e);
+      else { toast(`Up to ${MAX_DECOR} decorations`); return; }
+      syncButtons(); refresh(true);
+    });
+    $('decor').appendChild(b);
+  });
+  let typeTimer;
+  [['lineTop','top'],['lineMain','main'],['lineName','name']].forEach(([id,k])=>{
+    $(id).addEventListener('input', e=>{ S[k]=e.target.value; clearTimeout(typeTimer); typeTimer=setTimeout(()=>refresh(true), 120); });
+  });
+  $('size').addEventListener('input', e=>{ S.size = e.target.value/100; refresh(false); });
+  $('light').addEventListener('input', e=>{ S.light = e.target.value/100; refresh(false); });
+  $('resetBtn').addEventListener('click', ()=>{ S.cx=.5; S.base=.86; refresh(false); });
+
+  // ---------- output ----------
+  function exportJpeg(){ render(true); const url = stage.toDataURL('image/jpeg', 0.86); render(false); return url; }
+  function messageText(){ return [S.top, S.main, S.name].map(s=>s.trim()).filter(Boolean).join(' '); }
+  $('downloadBtn').addEventListener('click', ()=>{
+    const a = document.createElement('a'); a.href = exportJpeg(); a.download = 'lawnfetti-preview.jpg';
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+  $('bookBtn').addEventListener('click', ()=>{
+    const data = {
+      image: exportJpeg(),
+      message: messageText(),
+      event: (OCCASIONS.find(o=>o.id===S.occasion)||{}).event,
+      colors: STYLES[S.style].label + (S.decor.length ? ', decor: ' + S.decor.join(' ') : '')
+    };
+    try { sessionStorage.setItem('lawnfettiDesign', JSON.stringify(data)); }
+    catch(e){ toast('Download the image and attach it to the booking form.'); }
+    location.href = 'index.html#book';
+  });
+  if(navigator.canShare){
+    $('shareBtn').hidden = false;
+    $('shareBtn').addEventListener('click', async ()=>{
+      const blob = await (await fetch(exportJpeg())).blob();
+      const file = new File([blob], 'lawnfetti-preview.jpg', {type:'image/jpeg'});
+      const data = {files:[file], title:'My Lawnfetti preview', text:'Look what Lawnfetti could put on our lawn! 🎉'};
+      if(navigator.canShare(data)) navigator.share(data).catch(()=>{});
+      else toast('Sharing isn\'t supported here. Try Download instead.');
+    });
+  }
+
+  let toastTimer;
+  function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'), 2600); }
+
+  // ---------- start ----------
+  $('yr').textContent = new Date().getFullYear();
+  S.photo = sampleYard();
+  const fontsReady = Promise.all([
+    document.fonts.load('700 100px Fredoka'), document.fonts.load('400 60px Pacifico')
+  ]).catch(()=>{});
+  Promise.race([fontsReady, new Promise(r=>setTimeout(r,2500))]).then(()=>{
+    // restore a design the visitor already made this session
+    let saved = null; try { saved = JSON.parse(sessionStorage.getItem('lawnfettiState')||'null'); } catch(e){}
+    setOccasion('birthday');
+    if(saved){ Object.assign(S, saved, {photo:S.photo}); $('lineTop').value=S.top; $('lineMain').value=S.main; $('lineName').value=S.name; $('size').value=Math.round(S.size*100); $('light').value=Math.round(S.light*100); syncButtons(); refresh(true); }
+  });
+  addEventListener('pagehide', ()=>{
+    const {photo, sample, ...rest} = S;
+    try { sessionStorage.setItem('lawnfettiState', JSON.stringify(rest)); } catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
